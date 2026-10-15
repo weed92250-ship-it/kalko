@@ -6,34 +6,4 @@
         <changefreq>daily</changefreq>
         <priority>1.0</priority>
     </url>
-    <url>
-        <loc>https://kalkobg.pages.dev/#calc-rabota-zaplata</loc>
-        <lastmod>2026-10-15</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-    </url>
-    <url>
-        <loc>https://kalkobg.pages.dev/#calc-banka-kredit</loc>
-        <lastmod>2026-10-15</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-    </url>
-    <url>
-        <loc>https://kalkobg.pages.dev/#calc-avto-danak</loc>
-        <lastmod>2026-10-15</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-    </url>
-    <url>
-        <loc>https://kalkobg.pages.dev/#calc-finans-dds</loc>
-        <lastmod>2026-10-15</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-    </url>
-    <url>
-        <loc>https://kalkobg.pages.dev/#calc-notarius-taksi</loc>
-        <lastmod>2026-10-15</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-    </url>
 </urlset>
