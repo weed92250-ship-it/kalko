@@ -778,11 +778,34 @@
             const target = document.getElementById('calc-' + id);
             if (target) {
                 target.classList.add('active');
+                // Променяме URL хаш без да презареждаме страницата
+                history.pushState(null, null, '#calc-' + id);
             } else {
                 document.getElementById('calc-nachalo').classList.add('active');
+                history.pushState(null, null, '#calc-nachalo');
             }
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
+
+        // Автоматично отваряне на правилния калкулатор при зареждане на страницата с линк/анкер
+        window.addEventListener('DOMContentLoaded', () => {
+            const hash = window.location.hash;
+            if (hash && hash.startsWith('#calc-')) {
+                const calcId = hash.replace('#calc-', '');
+                otvoriKalkulator(calcId);
+            }
+        });
+
+        // Поддържане на бутона "Назад" / "Напред" на браузъра
+        window.addEventListener('popstate', () => {
+            const hash = window.location.hash;
+            if (hash && hash.startsWith('#calc-')) {
+                const calcId = hash.replace('#calc-', '');
+                otvoriKalkulator(calcId);
+            } else {
+                otvoriKalkulator('nachalo');
+            }
+        });
 
         function otvoriModal(type, event) {
             if (event) event.preventDefault();
@@ -813,4 +836,212 @@
             const ins = g * 0.1378; const tax = (g - ins) * 0.10; const net = g - ins - tax;
             document.getElementById('r-sal-ins').innerText = ins.toFixed(2);
             document.getElementById('r-sal-tax').innerText = tax.toFixed(2);
-            document.getElementById('r-
+            document.getElementById('r-sal-net').innerText = net.toFixed(2);
+        }
+
+        function sNetoBruto() {
+            const net = parseFloat(document.getElementById('sal-net-in').value) || 0;
+            const gross = net / (1 - 0.1378) / 0.9;
+            document.getElementById('r-sal-gross-out').innerText = gross.toFixed(2);
+        }
+
+        function sSravnenie() {
+            const a = parseFloat(document.getElementById('sal-a').value) || 0;
+            const b = parseFloat(document.getElementById('sal-b').value) || 0;
+            const netA = a * (1 - 0.1378) * 0.9; const netB = b * (1 - 0.1378) * 0.9;
+            document.getElementById('r-net-a').innerText = netA.toFixed(2);
+            document.getElementById('r-net-b').innerText = netB.toFixed(2);
+            document.getElementById('r-net-diff').innerText = (netB - netA).toFixed(2);
+        }
+
+        function sRabotodatel() {
+            const g = parseFloat(document.getElementById('emp-gross').value) || 0;
+            const ins = g * 0.1892;
+            document.getElementById('r-emp-ins').innerText = ins.toFixed(2);
+            document.getElementById('r-emp-total').innerText = (g + ins).toFixed(2);
+        }
+
+        function sKredit() {
+            const p = parseFloat(document.getElementById('cr-amt').value) || 0;
+            const n = parseInt(document.getElementById('cr-term').value) || 1;
+            const r = (parseFloat(document.getElementById('cr-rate').value) || 0) / 100 / 12;
+            let m = r > 0 ? (p * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1) : p / n;
+            document.getElementById('r-cr-mth').innerText = m.toFixed(2);
+            document.getElementById('r-cr-total').innerText = (m * n).toFixed(2);
+        }
+
+        function sPogasiavane() {
+            const bal = parseFloat(document.getElementById('pog-bal').value) || 0;
+            const extra = parseFloat(document.getElementById('pog-extra').value) || 0;
+            document.getElementById('r-pog-new').innerText = Math.max(0, bal - extra).toFixed(2);
+        }
+
+        function sBardzi() {
+            const amt = parseFloat(document.getElementById('bq-amt').value) || 0;
+            const days = parseInt(document.getElementById('bq-days').value) || 1;
+            const rate = parseFloat(document.getElementById('bq-rate').value) || 0;
+            const tot = amt + (amt * (rate / 100) * days);
+            document.getElementById('r-bq-tot').innerText = tot.toFixed(2);
+        }
+
+        function sDepozit() {
+            const p = parseFloat(document.getElementById('dep-amt').value) || 0;
+            const n = parseInt(document.getElementById('dep-term').value) || 1;
+            const r = (parseFloat(document.getElementById('dep-rate').value) || 0) / 100;
+            const interest = p * r * (n / 12);
+            document.getElementById('r-dep-int').innerText = interest.toFixed(2);
+            document.getElementById('r-dep-total').innerText = (p + interest).toFixed(2);
+        }
+
+        function sValuta() {
+            const amt = parseFloat(document.getElementById('val-amt').value) || 0;
+            const rate = parseFloat(document.getElementById('val-rate').value) || 1;
+            document.getElementById('r-val-res').innerText = (amt * rate).toFixed(2);
+        }
+
+        function sDanakMps() {
+            const kw = parseFloat(document.getElementById('auto-kw').value) || 0;
+            const mult = parseFloat(document.getElementById('auto-age').value) || 1.0;
+            document.getElementById('r-auto-tax').innerText = (kw * 1.10 * mult).toFixed(2);
+        }
+
+        function sGorivo() {
+            const d = parseFloat(document.getElementById('f-dist').value) || 0;
+            const c = parseFloat(document.getElementById('f-cons').value) || 0;
+            const p = parseFloat(document.getElementById('f-price').value) || 0;
+            const liters = (d / 100) * c;
+            document.getElementById('r-f-liters').innerText = liters.toFixed(2) + ' л';
+            document.getElementById('r-f-cost').innerText = (liters * p).toFixed(2);
+        }
+
+        function sDds() {
+            const v = parseFloat(document.getElementById('vat-v').value) || 0;
+            const tax = v * 0.20;
+            document.getElementById('r-vat-tax').innerText = tax.toFixed(2);
+            document.getElementById('r-vat-tot').innerText = (v + tax).toFixed(2);
+        }
+
+        function sInflatsia() {
+            const amt = parseFloat(document.getElementById('inf-amt').value) || 0;
+            const rate = parseFloat(document.getElementById('inf-rate').value) || 0;
+            const yrs = parseInt(document.getElementById('inf-yrs').value) || 1;
+            const tot = amt * Math.pow(1 + rate/100, yrs);
+            document.getElementById('r-inf-tot').innerText = tot.toFixed(2);
+        }
+
+        function sProtsenti() {
+            const o = parseFloat(document.getElementById('pr-old').value) || 1;
+            const n = parseFloat(document.getElementById('pr-new').value) || 0;
+            const diff = ((n - o) / o) * 100;
+            document.getElementById('r-pr-diff').innerText = (diff >= 0 ? '+' : '') + diff.toFixed(2) + '%';
+        }
+
+        function sLihvi() {
+            const p = parseFloat(document.getElementById('lih-p').value) || 0;
+            const d = parseInt(document.getElementById('lih-d').value) || 0;
+            const tot = p * 0.10 * (d / 365);
+            document.getElementById('r-lih-tot').innerText = tot.toFixed(2);
+        }
+
+        function sNotarius() {
+            const p = parseFloat(document.getElementById('not-p').value) || 0;
+            const tax = p * 0.03;
+            document.getElementById('r-not-tax').innerText = tax.toFixed(2);
+            document.getElementById('r-not-total').innerText = (tax + 500).toFixed(2);
+        }
+
+        function sIpoteka() {
+            const p = parseFloat(document.getElementById('hyp-p').value) || 0;
+            document.getElementById('r-hyp-total').innerText = (p * 0.015).toFixed(2);
+        }
+
+        function sKuhnia() {
+            const v = parseFloat(document.getElementById('kuh-v').value) || 0;
+            const density = parseFloat(document.getElementById('kuh-type').value) || 1;
+            document.getElementById('r-kuh-weight').innerText = (v * density).toFixed(1) + ' грама';
+        }
+
+        function sMerki() {
+            const tb = parseFloat(document.getElementById('tb-cnt').value) || 0;
+            document.getElementById('r-tb-ml').innerText = (tb * 15).toFixed(0) + ' ml';
+        }
+
+        function sZdravni() {
+            const inc = parseFloat(document.getElementById('zo-inc').value) || 0;
+            document.getElementById('r-zo-tot').innerText = (inc * 0.08).toFixed(2);
+        }
+
+        function sImt() {
+            const w = parseFloat(document.getElementById('bmi-w').value) || 0;
+            const h = (parseFloat(document.getElementById('bmi-h').value) || 0) / 100;
+            if (h > 0) {
+                const bmi = w / (h * h);
+                document.getElementById('r-bmi-val').innerText = bmi.toFixed(1);
+                let st = "Нормално тегло";
+                if (bmi < 18.5) st = "Поднормено тегло";
+                else if (bmi >= 25 && bmi < 30) st = "Наднормено тегло";
+                else if (bmi >= 30) st = "Затлъстяване";
+                document.getElementById('r-bmi-status').innerText = st;
+            }
+        }
+
+        function sKalorii() {
+            const min = parseFloat(document.getElementById('cal-min').value) || 0;
+            const factor = parseFloat(document.getElementById('cal-type').value) || 5;
+            document.getElementById('r-cal-tot').innerText = (min * factor).toFixed(0) + ' kcal';
+        }
+
+        function sBoya() {
+            const a = parseFloat(document.getElementById('p-area').value) || 0;
+            const coats = parseInt(document.getElementById('p-coats').value) || 1;
+            document.getElementById('r-p-liters').innerText = ((a / 10) * coats).toFixed(1) + ' литра';
+        }
+
+        function sPlochki() {
+            const area = parseFloat(document.getElementById('tile-area').value) || 0;
+            const waste = parseFloat(document.getElementById('tile-waste').value) || 0;
+            document.getElementById('r-tile-total').innerText = (area * (1 + waste / 100)).toFixed(2) + ' кв. м';
+        }
+
+        function sParket() {
+            const area = parseFloat(document.getElementById('park-area').value) || 0;
+            document.getElementById('r-park-tot').innerText = (area * 1.05).toFixed(2) + ' кв. м';
+        }
+
+        function sRazmeri() {
+            const eu = parseFloat(document.getElementById('sz-eu').value) || 40;
+            document.getElementById('r-sz-us').innerText = (eu - 33.5).toFixed(1);
+            document.getElementById('r-sz-uk').innerText = (eu - 34).toFixed(1);
+        }
+
+        function sTermin() {
+            const dtStr = document.getElementById('preg-date').value;
+            if (dtStr) {
+                const dt = new Date(dtStr);
+                dt.setDate(dt.getDate() + 280);
+                document.getElementById('r-preg-term').innerText = dt.toLocaleDateString('bg-BG');
+            }
+        }
+
+        function sDni() {
+            const d1Str = document.getElementById('d-start').value;
+            const d2Str = document.getElementById('d-end').value;
+            if (d1Str && d2Str) {
+                const diffMs = Math.abs(new Date(d2Str) - new Date(d1Str));
+                document.getElementById('r-d-diff').innerText = Math.ceil(diffMs / (1000 * 60 * 60 * 24)) + ' дни';
+            }
+        }
+
+        function sMerski() {
+            const m = parseFloat(document.getElementById('m-val').value) || 0;
+            document.getElementById('r-m-cm').innerText = (m * 100).toFixed(0) + ' cm';
+            document.getElementById('r-m-km').innerText = (m / 1000).toFixed(3) + ' km';
+        }
+
+        // Init all
+        sZaplata(); sNetoBruto(); sSravnenie(); sRabotodatel(); sKredit(); sPogasiavane(); sBardzi(); sDepozit(); sValuta();
+        sDanakMps(); sGorivo(); sDds(); sInflatsia(); sProtsenti(); sLihvi(); sNotarius(); sIpoteka(); sKuhnia(); sMerki();
+        sZdravni(); sImt(); sKalorii(); sBoya(); sPlochki(); sParket(); sRazmeri(); sTermin(); sDni(); sMerski();
+    </script>
+</body>
+</html>
