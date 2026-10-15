@@ -1,39 +1,884 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-    <url>
-        <loc>https://kalko.com/</loc>
-        <lastmod>2026-10-15</lastmod>
-        <changefreq>daily</changefreq>
-        <priority>1.0</priority>
-    </url>
-    <url>
-        <loc>https://kalko.com/#calc-rabota-zaplata</loc>
-        <lastmod>2026-10-15</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-    </url>
-    <url>
-        <loc>https://kalko.com/#calc-banka-kredit</loc>
-        <lastmod>2026-10-15</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-    </url>
-    <url>
-        <loc>https://kalko.com/#calc-avto-danak</loc>
-        <lastmod>2026-10-15</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-    </url>
-    <url>
-        <loc>https://kalko.com/#calc-finans-dds</loc>
-        <lastmod>2026-10-15</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-    </url>
-    <url>
-        <loc>https://kalko.com/#calc-notarius-taksi</loc>
-        <lastmod>2026-10-15</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-    </url>
-</urlset>
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalko - Онлайн калкулатори за всичко и за всеки</title>
+    <meta name="description" content="Пълен онлайн портал с калкулатори за работа, банки, автомобили, имоти, здраве, ремонти, кухня, пазар и конвертори.">
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --primary-hover: #1d4ed8;
+            --accent: #2563eb;
+            --bg-body: #f1f5f9;
+            --bg-card: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --border-color: #cbd5e1;
+            --header-bg: #0f172a;
+            --shadow: 0 1px 3px 0 rgba(0,0,0,0.1);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.5;
+            padding-bottom: 40px;
+        }
+
+        header {
+            background-color: var(--header-bg);
+            color: #fff;
+            padding: 12px 0;
+            border-bottom: 3px solid var(--accent);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #ffffff;
+            text-decoration: none;
+            cursor: pointer;
+            letter-spacing: -0.5px;
+        }
+
+        nav.top-nav { display: flex; gap: 6px; flex-wrap: wrap; }
+        nav.top-nav a {
+            color: #cbd5e1;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.08);
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        nav.top-nav a:hover { background: var(--accent); color: #ffffff; }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 15px; }
+
+        .portal-grid {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        @media (max-width: 900px) { .portal-grid { grid-template-columns: 1fr; } }
+
+        .sidebar-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 15px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+        }
+        .sidebar-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--primary);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 8px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+        .cat-group { margin-bottom: 15px; }
+        .cat-group-title { font-weight: 700; font-size: 0.9rem; color: #1e293b; margin-bottom: 6px; }
+        .cat-list { list-style: none; padding-left: 8px; }
+        .cat-list li { margin-bottom: 4px; }
+        .cat-list a {
+            color: #334155;
+            text-decoration: none;
+            font-size: 0.85rem;
+            display: block;
+            padding: 2px 6px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .cat-list a:hover { background-color: #e2e8f0; color: var(--primary); font-weight: 600; }
+
+        .main-workspace {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            min-height: 500px;
+        }
+
+        .calc-box { display: none; }
+        .calc-box.active { display: block; }
+        .calc-header { border-bottom: 2px solid var(--primary); padding-bottom: 10px; margin-bottom: 20px; }
+        .calc-header h2 { font-size: 1.4rem; color: var(--primary); }
+        .calc-header p { font-size: 0.85rem; color: var(--text-muted); }
+
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        @media (max-width: 600px) { .form-grid { grid-template-columns: 1fr; } }
+
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 5px; }
+        .form-group input, .form-group select {
+            width: 100%; padding: 8px 12px; border: 1px solid var(--border-color); border-radius: 4px; font-size: 0.95rem; outline: none;
+        }
+
+        .btn-action {
+            background-color: var(--primary); color: white; border: none; padding: 10px 20px; font-weight: 700; font-size: 0.9rem; border-radius: 4px; cursor: pointer; width: 100%; margin-top: 10px;
+        }
+        .btn-action:hover { background-color: var(--primary-hover); }
+
+        .result-panel { background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 15px; }
+        .result-panel h4 { font-size: 0.95rem; border-bottom: 1px solid #cbd5e1; padding-bottom: 5px; margin-bottom: 10px; }
+        .res-row { display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 8px; }
+        .res-row.highlight { font-weight: 800; font-size: 1.05rem; color: var(--primary); border-top: 1px dashed #cbd5e1; padding-top: 8px; }
+
+        .home-categories-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px; margin-top: 15px; }
+        .cat-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 15px; }
+        .cat-card h3 { font-size: 0.95rem; color: var(--primary); border-bottom: 1px solid #cbd5e1; padding-bottom: 6px; margin-bottom: 10px; }
+
+        .highlights-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 25px; }
+        @media (max-width: 600px) { .highlights-grid { grid-template-columns: 1fr; } }
+        .hl-box { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 6px; padding: 12px; }
+        .hl-box h4 { font-size: 0.85rem; color: #1e40af; text-transform: uppercase; margin-bottom: 8px; }
+        .hl-box ul { list-style: none; }
+        .hl-box li { margin-bottom: 4px; }
+        .hl-box a { color: #1d4ed8; font-size: 0.85rem; text-decoration: none; cursor: pointer; }
+        .hl-box a:hover { text-decoration: underline; }
+
+        /* Modal / Legal Sections */
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.6); z-index: 2000; justify-content: center; align-items: center; padding: 15px;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal-card {
+            background: #fff; border-radius: 8px; max-width: 600px; width: 100%; padding: 25px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2); max-height: 80vh; overflow-y: auto;
+        }
+        .modal-card h3 { font-size: 1.2rem; color: var(--primary); margin-bottom: 15px; border-bottom: 2px solid var(--border-color); padding-bottom: 8px; }
+        .modal-card p { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 12px; }
+        .modal-close { background: var(--primary); color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; float: right; font-weight: 600; margin-top: 15px; }
+
+        footer { margin-top: 40px; background: var(--header-bg); color: #94a3b8; padding: 20px 0; text-align: center; font-size: 0.85rem; border-top: 3px solid var(--accent); }
+        footer a { color: #cbd5e1; text-decoration: none; margin: 0 10px; cursor: pointer; }
+        footer a:hover { color: #ffffff; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container header-content">
+            <a class="logo" onclick="otvoriKalkulator('nachalo')">Kalko</a>
+            <nav class="top-nav">
+                <a onclick="otvoriKalkulator('rabota-zaplata')">На работа</a>
+                <a onclick="otvoriKalkulator('banka-kredit')">В банката</a>
+                <a onclick="otvoriKalkulator('notarius-taksi')">Нотариални такси</a>
+                <a onclick="otvoriKalkulator('finans-inflatsia')">Лични финанси</a>
+                <a onclick="otvoriKalkulator('avto-gorivo')">За автомобила</a>
+                <a onclick="otvoriKalkulator('konvertor-merki')">Конвертори</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container portal-grid">
+        <aside>
+            <div class="sidebar-card">
+                <div class="sidebar-title">Всички Калкулатори</div>
+
+                <div class="cat-group">
+                    <div class="cat-group-title">💼 На работа & Заплата</div>
+                    <ul class="cat-list">
+                        <li><a onclick="otvoriKalkulator('rabota-zaplata')">Калкулатор заплата бруто/нето</a></li>
+                        <li><a onclick="otvoriKalkulator('rabota-neto-bruto')">Заплата нето/бруто</a></li>
+                        <li><a onclick="otvoriKalkulator('rabota-sravnenie')">Сравнение на заплати</a></li>
+                        <li><a onclick="otvoriKalkulator('rabota-rabotodatel')">Общ разход на работодател</a></li>
+                    </ul>
+                </div>
+
+                <div class="cat-group">
+                    <div class="cat-group-title">🏦 В банката & Кредити</div>
+                    <ul class="cat-list">
+                        <li><a onclick="otvoriKalkulator('banka-kredit')">Кредитен калкулатор</a></li>
+                        <li><a onclick="otvoriKalkulator('banka-pogasiavane')">Частично погасяване на кредит</a></li>
+                        <li><a onclick="otvoriKalkulator('banka-bardzi-krediti')">Калкулатор за бързи кредити</a></li>
+                        <li><a onclick="otvoriKalkulator('banka-depozit')">Калкулатор депозити</a></li>
+                        <li><a onclick="otvoriKalkulator('banka-valuta')">Валутен калкулатор</a></li>
+                        <li><a onclick="otvoriKalkulator('finans-lihvi')">Законна лихва</a></li>
+                    </ul>
+                </div>
+
+                <div class="cat-group">
+                    <div class="cat-group-title">🚗 За автомобила</div>
+                    <ul class="cat-list">
+                        <li><a onclick="otvoriKalkulator('avto-danak')">Данък МПС</a></li>
+                        <li><a onclick="otvoriKalkulator('avto-gorivo')">Разход на гориво</a></li>
+                        <li><a onclick="otvoriKalkulator('avto-gumi')">Съвместимост на гуми</a></li>
+                    </ul>
+                </div>
+
+                <div class="cat-group">
+                    <div class="cat-group-title">📊 Лични финанси & Данъци</div>
+                    <ul class="cat-list">
+                        <li><a onclick="otvoriKalkulator('finans-dds')">Калкулатор ДДС</a></li>
+                        <li><a onclick="otvoriKalkulator('finans-inflatsia')">Инфлация за период</a></li>
+                        <li><a onclick="otvoriKalkulator('finans-protsenti')">Изменение в проценти</a></li>
+                    </ul>
+                </div>
+
+                <div class="cat-group">
+                    <div class="cat-group-title">🏛️ При нотариуса & Имоти</div>
+                    <ul class="cat-list">
+                        <li><a onclick="otvoriKalkulator('notarius-taksi')">Нотариални такси при имот</a></li>
+                        <li><a onclick="otvoriKalkulator('notarius-ipoteka')">Нотариални такси при ипотека</a></li>
+                    </ul>
+                </div>
+
+                <div class="cat-group">
+                    <div class="cat-group-title">🍳 В кухнята</div>
+                    <ul class="cat-list">
+                        <li><a onclick="otvoriKalkulator('kuhnia-teglo')">Тегло и обем на храни</a></li>
+                        <li><a onclick="otvoriKalkulator('kuhnia-merki')">Конвертор за готварски мерки</a></li>
+                    </ul>
+                </div>
+
+                <div class="cat-group">
+                    <div class="cat-group-title">🍏 Спорт и здраве</div>
+                    <ul class="cat-list">
+                        <li><a onclick="otvoriKalkulator('zdrave-osigurovki')">Здравни осигуровки</a></li>
+                        <li><a onclick="otvoriKalkulator('zdrave-imt')">Индекс на телесна маса</a></li>
+                        <li><a onclick="otvoriKalkulator('zdrave-kalorii')">Изразходване на калории</a></li>
+                    </ul>
+                </div>
+
+                <div class="cat-group">
+                    <div class="cat-group-title">🛠️ Ремонти</div>
+                    <ul class="cat-list">
+                        <li><a onclick="otvoriKalkulator('remont-boya')">Разход на боя</a></li>
+                        <li><a onclick="otvoriKalkulator('remont-plochki')">Калкулатор за фаянс</a></li>
+                        <li><a onclick="otvoriKalkulator('remont-parket')">Калкулатор паркет</a></li>
+                    </ul>
+                </div>
+
+                <div class="cat-group">
+                    <div class="cat-group-title">🛍️ На пазар</div>
+                    <ul class="cat-list">
+                        <li><a onclick="otvoriKalkulator('pazar-drehi')">Размери дрехи и обувки</a></li>
+                    </ul>
+                </div>
+
+                <div class="cat-group">
+                    <div class="cat-group-title">🍼 Бременност & Календари</div>
+                    <ul class="cat-list">
+                        <li><a onclick="otvoriKalkulator('bremennost-termin')">Овулация и термин</a></li>
+                        <li><a onclick="otvoriKalkulator('kalendar-dni')">Дни между 2 дати</a></li>
+                    </ul>
+                </div>
+
+                <div class="cat-group">
+                    <div class="cat-group-title">📐 Мерни единици</div>
+                    <ul class="cat-list">
+                        <li><a onclick="otvoriKalkulator('konvertor-merki')">Площ, дължина, обем</a></li>
+                    </ul>
+                </div>
+            </div>
+        </aside>
+
+        <section class="main-workspace">
+
+            <!-- НАЧАЛО -->
+            <div id="calc-nachalo" class="calc-box active">
+                <div class="calc-header">
+                    <h2>Kalko - Онлайн калкулатори за всичко и за всеки</h2>
+                    <p>Изберете категория и съответен калкулатор от менюто вляво.</p>
+                </div>
+
+                <div class="home-categories-grid">
+                    <div class="cat-card">
+                        <h3>💼 На работа</h3>
+                        <ul class="cat-list">
+                            <li><a onclick="otvoriKalkulator('rabota-zaplata')">• Заплата бруто/нето</a></li>
+                            <li><a onclick="otvoriKalkulator('rabota-neto-bruto')">• Заплата нето/бруто</a></li>
+                            <li><a onclick="otvoriKalkulator('rabota-rabotodatel')">• Разход за работодател</a></li>
+                        </ul>
+                    </div>
+                    <div class="cat-card">
+                        <h3>🏦 В банката</h3>
+                        <ul class="cat-list">
+                            <li><a onclick="otvoriKalkulator('banka-kredit')">• Кредитен калкулатор</a></li>
+                            <li><a onclick="otvoriKalkulator('banka-depozit')">• Калкулатор депозити</a></li>
+                            <li><a onclick="otvoriKalkulator('banka-valuta')">• Валутен калкулатор</a></li>
+                        </ul>
+                    </div>
+                    <div class="cat-card">
+                        <h3>🚗 За автомобила</h3>
+                        <ul class="cat-list">
+                            <li><a onclick="otvoriKalkulator('avto-danak')">• Данък МПС</a></li>
+                            <li><a onclick="otvoriKalkulator('avto-gorivo')">• Разход на гориво</a></li>
+                        </ul>
+                    </div>
+                    <div class="cat-card">
+                        <h3>📊 Лични финанси</h3>
+                        <ul class="cat-list">
+                            <li><a onclick="otvoriKalkulator('finans-dds')">• Калкулатор ДДС</a></li>
+                            <li><a onclick="otvoriKalkulator('finans-inflatsia')">• Инфлация</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="highlights-grid">
+                    <div class="hl-box">
+                        <h4>ПРОБВАХТЕ ЛИ?</h4>
+                        <ul>
+                            <li><a onclick="otvoriKalkulator('banka-pogasiavane')">Частично погасяване на кредит</a></li>
+                            <li><a onclick="otvoriKalkulator('finans-dds')">Калкулатор ДДС</a></li>
+                            <li><a onclick="otvoriKalkulator('rabota-rabotodatel')">Общ разход на работодател</a></li>
+                            <li><a onclick="otvoriKalkulator('finans-protsenti')">Изменение в проценти</a></li>
+                        </ul>
+                    </div>
+                    <div class="hl-box">
+                        <h4>НАЙ-ПОПУЛЯРНИ</h4>
+                        <ul>
+                            <li><a onclick="otvoriKalkulator('rabota-zaplata')">Калкулатор заплата</a></li>
+                            <li><a onclick="otvoriKalkulator('avto-danak')">Данъчен калкулатор за автомобили</a></li>
+                            <li><a onclick="otvoriKalkulator('banka-kredit')">Кредитен калкулатор</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- КАЛКУЛАТОРИ НА РАБОТА -->
+            <div id="calc-rabota-zaplata" class="calc-box">
+                <div class="calc-header"><h2>Калкулатор заплата бруто/нето</h2></div>
+                <div class="form-grid">
+                    <div><div class="form-group"><label>Брутна заплата:</label><input type="number" id="sal-gross" value="1500" oninput="sZaplata()"></div></div>
+                    <div class="result-panel">
+                        <div class="res-row"><span>Лични осигуровки (~13.78%):</span><span id="r-sal-ins">0.00</span></div>
+                        <div class="res-row"><span>Данък общ доход (10%):</span><span id="r-sal-tax">0.00</span></div>
+                        <div class="res-row highlight"><span>За получаване (Нето):</span><span id="r-sal-net">0.00</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="calc-rabota-neto-bruto" class="calc-box">
+                <div class="calc-header"><h2>Заплата нето/бруто</h2></div>
+                <div class="form-grid">
+                    <div><div class="form-group"><label>Желана чиста сума (Нето):</label><input type="number" id="sal-net-in" value="1200" oninput="sNetoBruto()"></div></div>
+                    <div class="result-panel"><div class="res-row highlight"><span>Необходима брутна заплата:</span><span id="r-sal-gross-out">0.00</span></div></div>
+                </div>
+            </div>
+
+            <div id="calc-rabota-sravnenie" class="calc-box">
+                <div class="calc-header"><h2>Сравнение на заплати</h2></div>
+                <div class="form-grid">
+                    <div>
+                        <div class="form-group"><label>Заплата A (Бруто):</label><input type="number" id="sal-a" value="1500" oninput="sSravnenie()"></div>
+                        <div class="form-group"><label>Заплата B (Бруто):</label><input type="number" id="sal-b" value="1800" oninput="sSravnenie()"></div>
+                    </div>
+                    <div class="result-panel">
+                        <div class="res-row"><span>Нето A:</span><span id="r-net-a">0.00</span></div>
+                        <div class="res-row"><span>Нето B:</span><span id="r-net-b">0.00</span></div>
+                        <div class="res-row highlight"><span>Разлика в Нето:</span><span id="r-net-diff">0.00</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="calc-rabota-rabotodatel" class="calc-box">
+                <div class="calc-header"><h2>Общ разход на работодател – нетна заплата</h2></div>
+                <div class="form-grid">
+                    <div><div class="form-group"><label>Брутна заплата:</label><input type="number" id="emp-gross" value="1500" oninput="sRabotodatel()"></div></div>
+                    <div class="result-panel">
+                        <div class="res-row"><span>Осигуровки работодател (~18.92%):</span><span id="r-emp-ins">0.00</span></div>
+                        <div class="res-row highlight"><span>Общ разход за фирмата:</span><span id="r-emp-total">0.00</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- В БАНКАТА -->
+            <div id="calc-banka-kredit" class="calc-box">
+                <div class="calc-header"><h2>Кредитен калкулатор</h2></div>
+                <div class="form-grid">
+                    <div>
+                        <div class="form-group"><label>Размер на кредита:</label><input type="number" id="cr-amt" value="20000" oninput="sKredit()"></div>
+                        <div class="form-group"><label>Срок (месеци):</label><input type="number" id="cr-term" value="60" oninput="sKredit()"></div>
+                        <div class="form-group"><label>Годишна лихва (%):</label><input type="number" id="cr-rate" value="5.0" step="0.1" oninput="sKredit()"></div>
+                    </div>
+                    <div class="result-panel">
+                        <div class="res-row highlight"><span>Месечна вноска:</span><span id="r-cr-mth">0.00</span></div>
+                        <div class="res-row"><span>Общо върната сума:</span><span id="r-cr-total">0.00</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="calc-banka-pogasiavane" class="calc-box">
+                <div class="calc-header"><h2>Частично погасяване на кредит</h2></div>
+                <div class="form-grid">
+                    <div>
+                        <div class="form-group"><label>Остатък по кредита:</label><input type="number" id="pog-bal" value="15000" oninput="sPogasiavane()"></div>
+                        <div class="form-group"><label>Извънредна вноска:</label><input type="number" id="pog-extra" value="3000" oninput="sPogasiavane()"></div>
+                    </div>
+                    <div class="result-panel">
+                        <div class="res-row highlight"><span>Нов остатък по главницата:</span><span id="r-pog-new">0.00</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="calc-banka-bardzi-krediti" class="calc-box">
+                <div class="calc-header"><h2>Калкулатор за бързи кредити</h2></div>
+                <div class="form-grid">
+                    <div>
+                        <div class="form-group"><label>Заемна сума:</label><input type="number" id="bq-amt" value="500" oninput="sBardzi()"></div>
+                        <div class="form-group"><label>Срок (дни):</label><input type="number" id="bq-days" value="30" oninput="sBardzi()"></div>
+                        <div class="form-group"><label>Дневна оскъпяваща такса (%):</label><input type="number" id="bq-rate" value="0.1" step="0.01" oninput="sBardzi()"></div>
+                    </div>
+                    <div class="result-panel">
+                        <div class="res-row highlight"><span>Сума за връщане:</span><span id="r-bq-tot">0.00</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="calc-banka-depozit" class="calc-box">
+                <div class="calc-header"><h2>Калкулатор депозити</h2></div>
+                <div class="form-grid">
+                    <div>
+                        <div class="form-group"><label>Депозирана сума:</label><input type="number" id="dep-amt" value="10000" oninput="sDepozit()"></div>
+                        <div class="form-group"><label>Срок (месеци):</label><input type="number" id="dep-term" value="12" oninput="sDepozit()"></div>
+                        <div class="form-group"><label>Годишна лихва (%):</label><input type="number" id="dep-rate" value="2.5" step="0.1" oninput="sDepozit()"></div>
+                    </div>
+                    <div class="result-panel">
+                        <div class="res-row"><span>Натрупана лихва:</span><span id="r-dep-int">0.00</span></div>
+                        <div class="res-row highlight"><span>Крайна сума:</span><span id="r-dep-total">0.00</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="calc-banka-valuta" class="calc-box">
+                <div class="calc-header"><h2>Валутен калкулатор</h2></div>
+                <div class="form-grid">
+                    <div>
+                        <div class="form-group"><label>Сума:</label><input type="number" id="val-amt" value="100" oninput="sValuta()"></div>
+                        <div class="form-group"><label>Курс на конвертиране:</label><input type="number" id="val-rate" value="1.95583" step="0.0001" oninput="sValuta()"></div>
+                    </div>
+                    <div class="result-panel">
+                        <div class="res-row highlight"><span>Преобразувана стойност:</span><span id="r-val-res">0.00</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ЗА АВТОМОБИЛА -->
+            <div id="calc-avto-danak" class="calc-box">
+                <div class="calc-header"><h2>Данъчен калкулатор за автомобили (Данък МПС)</h2></div>
+                <div class="form-grid">
+                    <div>
+                        <div class="form-group"><label>Мощност (kW):</label><input type="number" id="auto-kw" value="80" oninput="sDanakMps()"></div>
+                        <div class="form-group"><label>Възраст:</label>
+                            <select id="auto-age" onchange="sDanakMps()">
+                                <option value="1.1">Над 20 години</option>
+                                <option value="1.3">Над 15 до 20 години</option>
+                                <option value="1.5" selected>Над 10 до 15 години</option>
+                                <option value="1.8">Над 5 до 10 години</option>
+                                <option value="2.0">До 5 години включително</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="result-panel"><div class="res-row highlight"><span>Данък МПС:</span><span id="r-auto-tax">0.00</span></div></div>
+                </div>
+            </div>
+
+            <div id="calc-avto-gorivo" class="calc-box">
+                <div class="calc-header"><h2>Разход на гориво</h2></div>
+                <div class="form-grid">
+                    <div>
+                        <div class="form-group"><label>Разстояние (км):</label><input type="number" id="f-dist" value="450" oninput="sGorivo()"></div>
+                        <div class="form-group"><label>Разход (л/100км):</label><input type="number" id="f-cons" value="6.5" step="0.1" oninput="sGorivo()"></div>
+                        <div class="form-group"><label>Цена на литър:</label><input type="number" id="f-price" value="2.65" step="0.01" oninput="sGorivo()"></div>
+                    </div>
+                    <div class="result-panel">
+                        <div class="res-row"><span>Необходимо гориво:</span><span id="r-f-liters">0.00 л</span></div>
+                        <div class="res-row highlight"><span>Обща цена за пътя:</span><span id="r-f-cost">0.00</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="calc-avto-gumi" class="calc-box">
+                <div class="calc-header"><h2>Съвместимост на гуми</h2></div>
+                <div class="form-grid">
+                    <div>
+                        <div class="form-group"><label>Стар размер (ширина/профил/диаметър):</label><input type="text" value="205/55 R16" disabled></div>
+                        <div class="form-group"><label>Нов размер (ширина/профил/диаметър):</label><input type="text" value="215/55 R16" disabled></div>
+                    </div>
+                    <div class="result-panel">
+                        <div class="res-row highlight"><span>Разлика в диаметъра:</span><span>+11 мм (Съвместими)</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ЛИЧНИ ФИНАНСИ -->
+            <div id="calc-finans-dds" class="calc-box">
+                <div class="calc-header"><h2>Калкулатор ДДС</h2></div>
+                <div class="form-grid">
+                    <div><div class="form-group"><label>Сума:</label><input type="number" id="vat-v" value="100" oninput="sDds()"></div></div>
+                    <div class="result-panel">
+                        <div class="res-row"><span>ДДС (20%):</span><span id="r-vat-tax">0.00</span></div>
+                        <div class="res-row highlight"><span>Общо с ДДС:</span><span id="r-vat-tot">0.00</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="calc-finans-inflatsia" class="calc-box">
+                <div class="calc-header"><h2>Инфлация за произволен период</h2></div>
+                <div class="form-grid">
+                    <div>
+                        <div class="form-group"><label>Начална сума:</label><input type="number" id="inf-amt" value="1000" oninput="sInflatsia()"></div>
+                        <div class="form-group"><label>Годишна инфлация (%):</label><input type="number" id="inf-rate" value="5.0" step="0.1" oninput="sInflatsia()"></div>
+                        <div class="form-group"><label>Години:</label><input type="number" id="inf-yrs" value="3" oninput="sInflatsia()"></div>
+                    </div>
+                    <div class="result-panel"><div class="res-row highlight"><span>Еквивалентна стойност:</span><span id="r-inf-tot">0.00</span></div></div>
+                </div>
+            </div>
+
+            <div id="calc-finans-protsenti" class="calc-box">
+                <div class="calc-header"><h2>Изменение в проценти - калкулатор</h2></div>
+                <div class="form-grid">
+                    <div>
+                        <div class="form-group"><label>Стара стойност:</label><input type="number" id="pr-old" value="100" oninput="sProtsenti()"></div>
+                        <div class="form-group"><label>Нова стойност:</label><input type="number" id="pr-new" value="125" oninput="sProtsenti()"></div>
+                    </div>
+                    <div class="result-panel"><div class="res-row highlight"><span>Изменение (%):</span><span id="r-pr-diff">+0.00%</span></div></div>
+                </div>
+            </div>
+
+            <div id="calc-finans-lihvi" class="calc-box">
+                <div class="calc-header"><h2>Законна лихва</h2></div>
+                <div class="form-grid">
+                    <div>
+                        <div class="form-group"><label>Главница:</label><input type="number" id="lih-p" value="1000" oninput="sLihvi()"></div>
+                        <div class="form-group"><label>Забава (дни):</label><input type="number" id="lih-d" value="30" oninput="sLihvi()"></div>
+                    </div>
+                    <div class="result-panel"><div class="res-row highlight"><span>Законна лихва за периода:</span><span id="r-lih-tot">0.00</span></div></div>
+                </div>
+            </div>
+
+            <!-- ПРИ НОТАРИУСА -->
+            <div id="calc-notarius-taksi" class="calc-box">
+                <div class="calc-header"><h2>Нотариални такси при покупка на имот</h2></div>
+                <div class="form-grid">
+                    <div><div class="form-group"><label>Цена на имота:</label><input type="number" id="not-p" value="100000" oninput="sNotarius()"></div></div>
+                    <div class="result-panel">
+                        <div class="res-row"><span>Местен данък при придобиване (~3%):</span><span id="r-not-tax">0.00</span></div>
+                        <div class="res-row highlight"><span>Ориентировъчни общи нотариални такси:</span><span id="r-not-total">0.00</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="calc-notarius-ipoteka" class="calc-box">
+                <div class="calc-header"><h2>Нотариални такси при ипотека</h2></div>
+                <div class="form-grid">
+                    <div><div class="form-group"><label>Размер на ипотеката:</label><input type="number" id="hyp-p" value="80000" oninput="sIpoteka()"></div></div>
+                    <div class="result-panel"><div class="res-row highlight"><span>Такса за вписване и нотариус:</span><span id="r-hyp-total">0.00</span></div></div>
+                </div>
+            </div>
+
+            <!-- В КУХНЯТА -->
+            <div id="calc-kuhnia-teglo" class="calc-box">
+                <div class="calc-header"><h2>Тегло и обем на храни</h2></div>
+                <div class="form-grid">
+                    <div>
+                        <div class="form-group"><label>Обем (милилитри/чаши):</label><input type="number" id="kuh-v" value="250" oninput="sKuhnia()"></div>
+                        <div class="form-group"><label>Продукт:</label>
+                            <select id="kuh-type" onchange="sKuhnia()">
+                                <option value="1">Вода / Мляко (1 g/ml)</option>
+                                <option value="0.6">Брашно (0.6 g/ml)</option>
+                                <option value="0.85">Захар (0.85 g/ml)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="result-panel"><div class="res-row highlight"><span>Приблизително тегло:</span><span id="r-kuh-weight">0.00 грама</span></div></div>
+                </div>
+            </div>
+
+            <div id="calc-kuhnia-merki" class="calc-box">
+                <div class="calc-header"><h2>Конвертор за готварски мерки</h2></div>
+                <div class="form-grid">
+                    <div><div class="form-group"><label>Брой супени лъжици:</label><input type="number" id="tb-cnt" value="3" oninput="sMerki()"></div></div>
+                    <div class="result-panel"><div class="res-row highlight"><span>Еквивалент в милилитри:</span><span id="r-tb-ml">0 ml</span></div></div>
+                </div>
+            </div>
+
+            <!-- СПОРТ И ЗДРАВЕ -->
+            <div id="calc-zdrave-osigurovki" class="calc-box">
+                <div class="calc-header"><h2>Здравни осигуровки</h2></div>
+                <div class="form-grid">
+                    <div><div class="form-group"><label>Осигурителен доход:</label><input type="number" id="zo-inc" value="1000" oninput="sZdravni()"></div></div>
+                    <div class="result-panel"><div class="res-row highlight"><span>Здравна осигуровка (8%):</span><span id="r-zo-tot">0.00</span></div></div>
+                </div>
+            </div>
+
+            <div id="calc-zdrave-imt" class="calc-box">
+                <div class="calc-header"><h2>Индекс на телесна маса</h2></div>
+                <div class="form-grid">
+                    <div>
+                        <div class="form-group"><label>Тегло (кг):</label><input type="number" id="bmi-w" value="75" oninput="sImt()"></div>
+                        <div class="form-group"><label>Височина (см):</label><input type="number" id="bmi-h" value="175" oninput="sImt()"></div>
+                    </div>
+                    <div class="result-panel">
+                        <div class="res-row highlight"><span>Индекс (ИТМ):</span><span id="r-bmi-val">0.00</span></div>
+                        <div class="res-row"><span>Състояние:</span><span id="r-bmi-status">-</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="calc-zdrave-kalorii" class="calc-box">
+                <div class="calc-header"><h2>Изразходване на калории със спорт</h2></div>
+                <div class="form-grid">
+                    <div>
+                        <div class="form-group"><label>Времетраене (минути):</label><input type="number" id="cal-min" value="45" oninput="sKalorii()"></div>
+                        <div class="form-group"><label>Спорт:</label>
+                            <select id="cal-type" onchange="sKalorii()">
+                                <option value="8">Бягане</option>
+                                <option value="4">Ходене</option>
+                                <option value="6">Колоездене</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="result-panel"><div class="res-row highlight"><span>Изгорени калории:</span><span id="r-cal-tot">0 kcal</span></div></div>
+                </div>
+            </div>
+
+            <!-- РЕМОНТИ -->
+            <div id="calc-remont-boya" class="calc-box">
+                <div class="calc-header"><h2>Разход на боя</h2></div>
+                <div class="form-grid">
+                    <div>
+                        <div class="form-group"><label>Площ (кв.м):</label><input type="number" id="p-area" value="50" oninput="sBoya()"></div>
+                        <div class="form-group"><label>Ръце:</label><input type="number" id="p-coats" value="2" oninput="sBoya()"></div>
+                    </div>
+                    <div class="result-panel"><div class="res-row highlight"><span>Необходима боя:</span><span id="r-p-liters">0.00 литра</span></div></div>
+                </div>
+            </div>
+
+            <div id="calc-remont-plochki" class="calc-box">
+                <div class="calc-header"><h2>Калкулатор за фаянс и плочки</h2></div>
+                <div class="form-grid">
+                    <div>
+                        <div class="form-group"><label>Площ (кв.м):</label><input type="number" id="tile-area" value="20" oninput="sPlochki()"></div>
+                        <div class="form-group"><label>Фира (%):</label><input type="number" id="tile-waste" value="10" oninput="sPlochki()"></div>
+                    </div>
+                    <div class="result-panel"><div class="res-row highlight"><span>Необходими плочки с фира:</span><span id="r-tile-total">0.00 кв. м</span></div></div>
+                </div>
+            </div>
+
+            <div id="calc-remont-parket" class="calc-box">
+                <div class="calc-header"><h2>Калкулатор паркет</h2></div>
+                <div class="form-grid">
+                    <div>
+                        <div class="form-group"><label>Площ на стаята (кв.м):</label><input type="number" id="park-area" value="30" oninput="sParket()"></div>
+                    </div>
+                    <div class="result-panel"><div class="res-row highlight"><span>Паркет с 5% фира:</span><span id="r-park-tot">0.00 кв. м</span></div></div>
+                </div>
+            </div>
+
+            <!-- НА ПАЗАР -->
+            <div id="calc-pazar-drehi" class="calc-box">
+                <div class="calc-header"><h2>Конвертор за номера на дрехи и обувки</h2></div>
+                <div class="form-grid">
+                    <div>
+                        <div class="form-group"><label>Европейски размер обувки (EU):</label><input type="number" id="sz-eu" value="42" oninput="sRazmeri()"></div>
+                    </div>
+                    <div class="result-panel">
+                        <div class="res-row"><span>Американски размер (US):</span><span id="r-sz-us">8.5</span></div>
+                        <div class="res-row highlight"><span>Британски размер (UK):</span><span id="r-sz-uk">8.0</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- БРЕМЕННОСТ И КАЛЕНДАР -->
+            <div id="calc-bremennost-termin" class="calc-box">
+                <div class="calc-header"><h2>Овулация и вероятен термин</h2></div>
+                <div class="form-grid">
+                    <div>
+                        <div class="form-group"><label>Последен цикъл (дата):</label><input type="date" id="preg-date" value="2026-01-01" onchange="sTermin()"></div>
+                    </div>
+                    <div class="result-panel"><div class="res-row highlight"><span>Вероятен термин:</span><span id="r-preg-term">08.10.2026</span></div></div>
+                </div>
+            </div>
+
+            <div id="calc-kalendar-dni" class="calc-box">
+                <div class="calc-header"><h2>Дни между 2 дати</h2></div>
+                <div class="form-grid">
+                    <div>
+                        <div class="form-group"><label>Начална дата:</label><input type="date" id="d-start" value="2026-01-01" onchange="sDni()"></div>
+                        <div class="form-group"><label>Крайна дата:</label><input type="date" id="d-end" value="2026-12-31" onchange="sDni()"></div>
+                    </div>
+                    <div class="result-panel"><div class="res-row highlight"><span>Разлика в дни:</span><span id="r-d-diff">364 дни</span></div></div>
+                </div>
+            </div>
+
+            <!-- МЕРНИ ЕДИНИЦИ -->
+            <div id="calc-konvertor-merki" class="calc-box">
+                <div class="calc-header"><h2>Конвертор за мерни единици (дължина)</h2></div>
+                <div class="form-grid">
+                    <div>
+                        <div class="form-group"><label>Дължина в метри:</label><input type="number" id="m-val" value="100" oninput="sMerski()"></div>
+                    </div>
+                    <div class="result-panel">
+                        <div class="res-row"><span>Сантиметри:</span><span id="r-m-cm">0 cm</span></div>
+                        <div class="res-row highlight"><span>Километри:</span><span id="r-m-km">0 km</span></div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <!-- MODAL FOR LEGAL PAGES -->
+    <div id="legal-modal" class="modal-overlay">
+        <div class="modal-card">
+            <h3 id="modal-title">Заглавие</h3>
+            <div id="modal-body">
+                <p>Съдържание...</p>
+            </div>
+            <button class="modal-close" onclick="zatvoriModal()">Затвори</button>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Kalko - Онлайн калкулатори за всичко и за всеки.</p>
+            <p style="margin-top: 10px;">
+                <a onclick="otvoriModal('kontakti')">Контакти</a> |
+                <a onclick="otvoriModal('uslovia')">Условия за ползване</a> |
+                <a onclick="otvoriModal('poveritelnost')">Поверителност</a>
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        function otvoriKalkulator(id) {
+            document.querySelectorAll('.calc-box').forEach(b => b.classList.remove('active'));
+            const target = document.getElementById('calc-' + id);
+            if (target) {
+                target.classList.add('active');
+            } else {
+                document.getElementById('calc-nachalo').classList.add('active');
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function otvoriModal(type) {
+            const modal = document.getElementById('legal-modal');
+            const title = document.getElementById('modal-title');
+            const body = document.getElementById('modal-body');
+
+            if (type === 'kontakti') {
+                title.innerText = 'Контакти';
+                body.innerHTML = '<p>За въпроси, предложения и медийни запитвания можете да се свържете с екипа на Kalko на имейл адрес:</p><p><strong>contact@kalko.com</strong></p>';
+            } else if (type === 'uslovia') {
+                title.innerText = 'Условия за ползване';
+                body.innerHTML = '<p>Всички калкулатори и инструменти в портала Kalko са с изцяло информативен и ориентировъчен характер.</p><p>Собствениците на портала не носят отговорност за евентуални грешки или финансови решения, взети въз основа на изчислените резултати.</p>';
+            } else if (type === 'poveritelnost') {
+                title.innerText = 'Политика за поверителност';
+                body.innerHTML = '<p>Порталът Kalko зачита вашата поверителност. Ние не събираме и не съхраняваме лични данни от въведените от вас стойности в калкулаторите.</p><p>Всички изчисления се извършват локално във вашия интернет браузър.</p>';
+            }
+
+            modal.classList.add('active');
+        }
+
+        function zatvoriModal() {
+            document.getElementById('legal-modal').classList.remove('active');
+        }
+
+        function sZaplata() {
+            const g = parseFloat(document.getElementById('sal-gross').value) || 0;
+            const ins = g * 0.1378; const tax = (g - ins) * 0.10; const net = g - ins - tax;
+            document.getElementById('r-sal-ins').innerText = ins.toFixed(2);
+            document.getElementById('r-sal-tax').innerText = tax.toFixed(2);
+            document.getElementById('r-sal-net').innerText = net.toFixed(2);
+        }
+
+        function sNetoBruto() {
+            const net = parseFloat(document.getElementById('sal-net-in').value) || 0;
+            const gross = net / (1 - 0.1378) / 0.9;
+            document.getElementById('r-sal-gross-out').innerText = gross.toFixed(2);
+        }
+
+        function sSravnenie() {
+            const a = parseFloat(document.getElementById('sal-a').value) || 0;
+            const b = parseFloat(document.getElementById('sal-b').value) || 0;
+            const netA = a * (1 - 0.1378) * 0.9; const netB = b * (1 - 0.1378) * 0.9;
+            document.getElementById('r-net-a').innerText = netA.toFixed(2);
+            document.getElementById('r-net-b').innerText = netB.toFixed(2);
+            document.getElementById('r-net-diff').innerText = (netB - netA).toFixed(2);
+        }
+
+        function sRabotodatel() {
+            const g = parseFloat(document.getElementById('emp-gross').value) || 0;
+            const ins = g * 0.1892;
+            document.getElementById('r-emp-ins').innerText = ins.toFixed(2);
+            document.getElementById('r-emp-total').innerText = (g + ins).toFixed(2);
+        }
+
+        function sKredit() {
+            const p = parseFloat(document.getElementById('cr-amt').value) || 0;
+            const n = parseInt(document.getElementById('cr-term').value) || 1;
+            const r = (parseFloat(document.getElementById('cr-rate').value) || 0) / 100 / 12;
+            let m = r > 0 ? (p * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1) : p / n;
+            document.getElementById('r-cr-mth').innerText = m.toFixed(2);
+            document.getElementById('r-cr-total').innerText = (m * n).toFixed(2);
+        }
+
+        function sPogasiavane() {
+            const bal = parseFloat(document.getElementById('pog-bal').value) || 0;
+            const extra = parseFloat(document.getElementById('pog-extra').value) || 0;
+            document.getElementById('r-pog-new').innerText = Math.max(0, bal - extra).toFixed(2);
+        }
+
+        function sBardzi() {
+            const amt = parseFloat(document.getElementById('bq-amt').value) || 0;
+            const days = parseInt(document.getElementById('bq-days').value) || 1;
+            const rate = parseFloat(document.getElementById('bq-rate').value) || 0;
+            const tot = amt + (amt * (rate / 100) * days);
+            document.getElementById('r-bq-tot').innerText = tot.toFixed(2);
+        }
+
+        function sDepozit() {
+            const p = parseFloat(document.getElementById('dep-amt').value) || 0;
+            const n = parseInt(document.getElementById('dep-term').value) || 1;
+            const r = (parseFloat(document.getElementById('dep-rate').value) || 0) / 100;
+            const interest = p * r * (n / 12);
+            document.getElementById('r-dep-int').innerText = interest.toFixed(2);
+            document.getElementById('r-dep-total').innerText = (p + interest).toFixed(2);
+        }
+
+        function sValuta() {
+            const amt = parseFloat(document.getElementById('val-amt').value) || 0;
+            const rate = parseFloat(document.getElementById('val-rate').value) || 1;
+            document.getElementById('r-val-res').innerText = (amt * rate).toFixed(2);
+        }
+
+        function sDanakMps() {
+            const kw = parseFloat(document.getElementById('auto-kw').value) || 0;
+            const mult = parseFloat(document.getElementById('auto-age').value) || 1.0;
+            document.getElementById('r-auto-tax').innerText = (kw * 1.10 * mult).toFixed(2);
+        }
+
+        function sGorivo() {
+            const d = parseFloat(document.getElementById('f-dist').value) || 0;
+            const c = parseFloat(document.getElementById('f-cons').value) || 0;
+            const p = parseFloat(document.getElementById('f-price').value) || 0;
+            const liters = (d / 100) * c;
+            document.getElementById('r-f-liters').innerText = liters.toFixed(2) + ' л';
+            document.getElementById('r-f-cost').innerText = (liters * p).toFixed(2);
+        }
+
+        function
