@@ -5,6 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kalko - Онлайн калкулатори за всичко и за всеки</title>
     <meta name="description" content="Пълен онлайн портал с калкулатори за работа, банки, автомобили, имоти, здраве, ремонти, кухня, пазар и конвертори.">
+    
+    <!-- Google Search Console Верификация -->
+    <meta name="google-site-verification" content="ТУК_ПОСТАВИ_ТВОЯ_GOOGLE_SEARCH_CONSOLE_КОД" />
+
+    <!-- Google Analytics (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-XXXXXXXXXX');
+    </script>
+
     <style>
         :root {
             --primary: #1e3a8a;
@@ -132,11 +145,6 @@
         .form-group input, .form-group select {
             width: 100%; padding: 8px 12px; border: 1px solid var(--border-color); border-radius: 4px; font-size: 0.95rem; outline: none;
         }
-
-        .btn-action {
-            background-color: var(--primary); color: white; border: none; padding: 10px 20px; font-weight: 700; font-size: 0.9rem; border-radius: 4px; cursor: pointer; width: 100%; margin-top: 10px;
-        }
-        .btn-action:hover { background-color: var(--primary-hover); }
 
         .result-panel { background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 15px; }
         .result-panel h4 { font-size: 0.95rem; border-bottom: 1px solid #cbd5e1; padding-bottom: 5px; margin-bottom: 10px; }
@@ -286,7 +294,7 @@
                 </div>
 
                 <div class="cat-group">
-                    <div class="cat-group-title">📐 Мерни единици</div>
+                    <div class="cat-group-title">📐 Мерни единици & Конвертори</div>
                     <ul class="cat-list">
                         <li><a href="#calc-konvertor-merki" onclick="otvoriKalkulator('konvertor-merki', event)">Площ, дължина, обем</a></li>
                     </ul>
@@ -328,10 +336,10 @@
                         </ul>
                     </div>
                     <div class="cat-card">
-                        <h3>📊 Лични финанси</h3>
+                        <h3>📊 Конвертори & Финанси</h3>
                         <ul class="cat-list">
+                            <li><a href="#calc-konvertor-merki" onclick="otvoriKalkulator('konvertor-merki', event)">• Конвертор за мерки</a></li>
                             <li><a href="#calc-finans-dds" onclick="otvoriKalkulator('finans-dds', event)">• Калкулатор ДДС</a></li>
-                            <li><a href="#calc-finans-inflatsia" onclick="otvoriKalkulator('finans-inflatsia', event)">• Инфлация</a></li>
                         </ul>
                     </div>
                 </div>
@@ -340,10 +348,10 @@
                     <div class="hl-box">
                         <h4>ПРОБВАХТЕ ЛИ?</h4>
                         <ul>
+                            <li><a href="#calc-konvertor-merki" onclick="otvoriKalkulator('konvertor-merki', event)">Конвертор за мерни единици</a></li>
                             <li><a href="#calc-banka-pogasiavane" onclick="otvoriKalkulator('banka-pogasiavane', event)">Частично погасяване на кредит</a></li>
                             <li><a href="#calc-finans-dds" onclick="otvoriKalkulator('finans-dds', event)">Калкулатор ДДС</a></li>
                             <li><a href="#calc-rabota-rabotodatel" onclick="otvoriKalkulator('rabota-rabotodatel', event)">Общ разход на работодател</a></li>
-                            <li><a href="#calc-finans-protsenti" onclick="otvoriKalkulator('finans-protsenti', event)">Изменение в проценти</a></li>
                         </ul>
                     </div>
                     <div class="hl-box">
@@ -724,16 +732,16 @@
                 </div>
             </div>
 
-            <!-- МЕРНИ ЕДИНИЦИ -->
+            <!-- МЕРНИ ЕДИНИЦИ & КОНВЕРТОРИ -->
             <div id="calc-konvertor-merki" class="calc-box">
-                <div class="calc-header"><h2>Конвертор за мерни единици (дължина)</h2></div>
+                <div class="calc-header"><h2>Конвертор за мерни единици (дължина & площ)</h2></div>
                 <div class="form-grid">
                     <div>
-                        <div class="form-group"><label>Дължина в метри:</label><input type="number" id="m-val" value="100" oninput="sMerski()"></div>
+                        <div class="form-group"><label>Стойност в метри:</label><input type="number" id="m-val" value="100" oninput="sMerski()"></div>
                     </div>
                     <div class="result-panel">
-                        <div class="res-row"><span>Сантиметри:</span><span id="r-m-cm">0 cm</span></div>
-                        <div class="res-row highlight"><span>Километри:</span><span id="r-m-km">0 km</span></div>
+                        <div class="res-row"><span>Сантиметри:</span><span id="r-m-cm">10000 cm</span></div>
+                        <div class="res-row highlight"><span>Километри:</span><span id="r-m-km">0.100 km</span></div>
                     </div>
                 </div>
             </div>
@@ -786,4 +794,23 @@
                 title.innerText = 'Контакти';
                 body.innerHTML = '<p>За въпроси, предложения и медийни запитвания можете да се свържете с екипа на Kalko на имейл адрес:</p><p><strong>contact@kalko.com</strong></p>';
             } else if (type === 'uslovia') {
-                title.innerText
+                title.innerText = 'Условия за ползване';
+                body.innerHTML = '<p>Всички калкулатори и инструменти в портала Kalko са с изцяло информативен и ориентировъчен характер.</p><p>Собствениците на портала не носят отговорност за евентуални грешки или финансови решения, взети въз основа на изчислените резултати.</p>';
+            } else if (type === 'poveritelnost') {
+                title.innerText = 'Политика за поверителност';
+                body.innerHTML = '<p>Порталът Kalko зачита вашата поверителност. Ние не събираме и не съхраняваме лични данни от въведените от вас стойности в калкулаторите.</p><p>Всички изчисления се извършват локално във вашия интернет браузър.</p>';
+            }
+
+            modal.classList.add('active');
+        }
+
+        function zatvoriModal() {
+            document.getElementById('legal-modal').classList.remove('active');
+        }
+
+        function sZaplata() {
+            const g = parseFloat(document.getElementById('sal-gross').value) || 0;
+            const ins = g * 0.1378; const tax = (g - ins) * 0.10; const net = g - ins - tax;
+            document.getElementById('r-sal-ins').innerText = ins.toFixed(2);
+            document.getElementById('r-sal-tax').innerText = tax.toFixed(2);
+            document.getElementById('r-
